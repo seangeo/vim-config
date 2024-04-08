@@ -4,7 +4,7 @@
 - [*] Color scheme
 - [*] Telescope
 - [*] Treesitter
-- [ ] Explorer
+- [*] Explorer
 - [ ] LSP
 - [ ] Snippets
 - [ ] AI
