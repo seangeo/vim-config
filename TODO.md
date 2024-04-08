@@ -1,5 +1,5 @@
 
-- [ ] Basic config
+- [*] Basic config
 - [ ] Plugin Loader
 - [ ] Color scheme
 - [ ] Telescope
