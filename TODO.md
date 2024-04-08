@@ -1,6 +1,6 @@
 
 - [*] Basic config
-- [ ] Plugin Loader
+- [*] Plugin Loader
 - [ ] Color scheme
 - [ ] Telescope
 - [ ] Treesitter
