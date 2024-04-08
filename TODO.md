@@ -1,8 +1,8 @@
 
 - [*] Basic config
 - [*] Plugin Loader
-- [ ] Color scheme
-- [ ] Telescope
+- [*] Color scheme
+- [*] Telescope
 - [ ] Treesitter
 - [ ] Explorer
 - [ ] LSP
