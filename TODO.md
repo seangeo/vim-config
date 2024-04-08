@@ -3,7 +3,7 @@
 - [*] Plugin Loader
 - [*] Color scheme
 - [*] Telescope
-- [ ] Treesitter
+- [*] Treesitter
 - [ ] Explorer
 - [ ] LSP
 - [ ] Snippets
