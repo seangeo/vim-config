@@ -1,4 +1,4 @@
-vim.opt.clipboard:append "unnamedplus"
+vim.opt.clipboard:append("unnamedplus")
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
 vim.opt.expandtab = true
@@ -12,8 +12,8 @@ vim.opt.cursorlineopt = "both"
 vim.opt.ruler = true
 vim.opt.switchbuf = "useopen"
 vim.opt.scrolloff = 3
-vim.opt.completeopt = {"menu", "noinsert", "noselect", "preview"}
-vim.opt.shortmess:append "c"
+vim.opt.completeopt = { "menu", "noinsert", "noselect", "preview" }
+vim.opt.shortmess:append("c")
 
 vim.g.mapleader = ","
 vim.keymap.set("n", "\\", ":nohl<CR>", { silent = true })
