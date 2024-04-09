@@ -7,5 +7,7 @@
 - [*] Explorer
 - [*] LSP
 - [*] Snippets
+- [*] Trouble
+- [ ] Testing
 - [ ] AI
 
