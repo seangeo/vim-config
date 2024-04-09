@@ -5,7 +5,7 @@
 - [*] Telescope
 - [*] Treesitter
 - [*] Explorer
-- [ ] LSP
+- [*] LSP
 - [ ] Snippets
 - [ ] AI
 
