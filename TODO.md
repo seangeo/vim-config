@@ -6,6 +6,6 @@
 - [*] Treesitter
 - [*] Explorer
 - [*] LSP
-- [ ] Snippets
+- [*] Snippets
 - [ ] AI
 
