@@ -3,11 +3,11 @@ return {
   branch = "v3.x",
   dependencies = {
     "nvim-lua/plenary.nvim",
-    "nvim-tree/nvim-web-devicons", 
+    "nvim-tree/nvim-web-devicons",
     "MunifTanjim/nui.nvim",
     "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
   },
-  config = function() 
+  config = function()
     vim.keymap.set("n", "<leader>n", ":Neotree<cr>")
 
     require("neo-tree").setup({
