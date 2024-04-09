@@ -8,6 +8,7 @@
 - [*] LSP
 - [*] Snippets
 - [*] Trouble
-- [ ] Testing
+- [*] Testing
+- [ ] Git
 - [ ] AI
 
