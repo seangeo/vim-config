@@ -19,6 +19,7 @@ return {
     config = function()
       local lspconfig = require("lspconfig")
       lspconfig.lua_ls.setup({})
+      lspconfig.csharp_ls.setup({})
 
       -- Global mappings.
       -- See `:help vim.diagnostic.*` for documentation on any of the below functions
