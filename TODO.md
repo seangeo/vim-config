@@ -9,6 +9,6 @@
 - [*] Snippets
 - [*] Trouble
 - [*] Testing
-- [ ] Git
+- [*] Git
 - [ ] AI
 
