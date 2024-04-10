@@ -1,15 +1,15 @@
 
-- [*] Basic config
-- [*] Plugin Loader
-- [*] Color scheme
-- [*] Telescope
-- [*] Treesitter
-- [*] Explorer
-- [*] LSP
-- [*] Snippets
-- [*] Trouble
-- [*] Testing
-- [*] Git
+- [x] Basic config
+- [x] Plugin Loader
+- [x] Color scheme
+- [x] Telescope
+- [x] Treesitter
+- [x] Explorer
+- [x] LSP
+- [x] Snippets
+- [x] Trouble
+- [x] Testing
+- [x] Git
 - [ ] Noice
 - [ ] Oil
 - [ ] AI
