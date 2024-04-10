@@ -11,9 +11,15 @@ return {
   },
   {
     "hrsh7th/nvim-cmp",
+    dependencies = {
+      { "hrsh7th/cmp-buffer" },
+      { "hrsh7th/cmp-path" },
+      { "hrsh7th/cmp-cmdline" },
+    },
     config = function()
       -- Set up nvim-cmp.
       local cmp = require("cmp")
+      local cmp_select = { behavior = cmp.SelectBehavior.Select }
       require("luasnip.loaders.from_vscode").lazy_load()
 
       cmp.setup({
@@ -28,6 +34,8 @@ return {
           documentation = cmp.config.window.bordered(),
         },
         mapping = cmp.mapping.preset.insert({
+          ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
+          ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
           ["<C-Space>"] = cmp.mapping.complete(),
@@ -48,6 +56,29 @@ return {
           { name = "git" }, -- You can specify the `git` source if [you were installed it](https://github.com/petertriho/cmp-git).
         }, {
           { name = "buffer" },
+        }),
+      })
+
+      -- `/` cmdline setup.
+      cmp.setup.cmdline("/", {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = {
+          { name = "buffer" },
+        },
+      })
+
+      -- `:` cmdline setup.
+      cmp.setup.cmdline(":", {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources({
+          { name = "path" },
+        }, {
+          {
+            name = "cmdline",
+            option = {
+              ignore_cmds = { "Man", "!" },
+            },
+          },
         }),
       })
     end,
