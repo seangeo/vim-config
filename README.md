@@ -11,7 +11,7 @@
 - [x] Trouble
 - [x] Testing
 - [x] Git
-- [ ] Noice
+- [x] Noice
 - [ ] Oil
 - [ ] AI
 
