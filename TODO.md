@@ -10,5 +10,7 @@
 - [*] Trouble
 - [*] Testing
 - [*] Git
+- [ ] Noice
+- [ ] Oil
 - [ ] AI
 
