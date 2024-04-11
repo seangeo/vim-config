@@ -12,7 +12,7 @@
 - [x] Testing
 - [x] Git
 - [x] Noice
+- [x] Testing short cuts
 - [ ] Oil
-- [ ] Testing short cuts
 - [ ] AI
 
