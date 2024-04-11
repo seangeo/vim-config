@@ -15,5 +15,5 @@
 - [x] Testing short cuts
 - [x] Which key
 - [x] Oil
-- [ ] AI
+- [x] AI
 
