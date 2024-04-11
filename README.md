@@ -13,5 +13,6 @@
 - [x] Git
 - [x] Noice
 - [ ] Oil
+- [ ] Testing short cuts
 - [ ] AI
 
