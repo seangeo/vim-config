@@ -14,6 +14,6 @@
 - [x] Noice
 - [x] Testing short cuts
 - [x] Which key
-- [ ] Oil
+- [x] Oil
 - [ ] AI
 
