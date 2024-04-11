@@ -13,7 +13,7 @@
 - [x] Git
 - [x] Noice
 - [x] Testing short cuts
-- [ ] Which key
+- [x] Which key
 - [ ] Oil
 - [ ] AI
 
