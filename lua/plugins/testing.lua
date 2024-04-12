@@ -6,11 +6,13 @@ return {
     "antoinemadec/FixCursorHold.nvim",
     "nvim-treesitter/nvim-treesitter",
     "Issafalcon/neotest-dotnet",
+    "jfpedroza/neotest-elixir",
   },
   config = function()
     require("neotest").setup({
       adapters = {
         require("neotest-dotnet"),
+        require("neotest-elixir"),
       },
     })
 
