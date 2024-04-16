@@ -15,12 +15,17 @@ return {
       { "hrsh7th/cmp-buffer" },
       { "hrsh7th/cmp-path" },
       { "hrsh7th/cmp-cmdline" },
+      { "onsails/lspkind.nvim" },
+      { "windwp/nvim-autopairs" },
     },
     config = function()
       -- Set up nvim-cmp.
       local cmp = require("cmp")
       local cmp_select = { behavior = cmp.SelectBehavior.Select }
+      local lspkind = require("lspkind")
       require("luasnip.loaders.from_vscode").lazy_load()
+
+      require("nvim-autopairs").setup()
 
       cmp.setup({
         snippet = {
@@ -44,11 +49,23 @@ return {
         }),
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
-          { name = "luasnip" }, -- For luasnip users.
+          { name = "luasnip" },                  -- For luasnip users.
           { name = "copilot", group_index = 2 }, -- Copilot Source
         }, {
           { name = "buffer" },
         }),
+        -- Enable pictogram icons for lsp/autocompletion
+        formatting = {
+          expandable_indicator = true,
+          format = lspkind.cmp_format({
+            mode = "symbol_text",
+            maxwidth = 50,
+            ellipsis_char = "...",
+            symbol_map = {
+              Copilot = "",
+            },
+          }),
+        },
       })
 
       -- Set configuration for specific filetype.
