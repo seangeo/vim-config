@@ -9,7 +9,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "elixirls" },
+        ensure_installed = { "lua_ls", "lexical" },
         automatic_installation = true,
       })
     end,
@@ -22,7 +22,7 @@ return {
       local lspconfig = require("lspconfig")
       lspconfig.lua_ls.setup({ capabilities = capabilities })
       lspconfig.csharp_ls.setup({ capabilities = capabilities })
-      lspconfig.elixirls.setup({ capabilities = capabilities, cmd = { "elixir-ls" } })
+      lspconfig.lexical.setup({ capabilities = capabilities, cmd = { "lexical" } })
 
       -- Global mappings.
       -- See `:help vim.diagnostic.*` for documentation on any of the below functions
