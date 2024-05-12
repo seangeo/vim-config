@@ -60,7 +60,7 @@ return {
             { buffer = ev.buf, desc = "Code Actions" }
           )
           vim.keymap.set("n", "gr", vim.lsp.buf.references, { buffer = ev.buf, desc = "References" })
-          vim.keymap.set("n", "<leader>f", function()
+          vim.keymap.set("n", "<leader>F", function()
             vim.lsp.buf.format({ async = true })
           end, { buffer = ev.buf, desc = "Format" })
         end,
