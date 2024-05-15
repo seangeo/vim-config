@@ -51,10 +51,13 @@ return {
             if cmp.visible() then
               if luasnip.expandable() then
                 luasnip.expand()
-              else
+              elseif cmp.get_active_entry() then
                 cmp.confirm({
                   select = false,
                 })
+              else
+                cmp.close()
+                fallback()
               end
             else
               fallback()
