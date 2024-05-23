@@ -16,4 +16,6 @@
 - [x] Which key
 - [x] Oil
 - [x] AI
-
+- [ ] Terminal specific keymappings
+- [ ] Hard time & precognition
+- [ ] Extract key mappings into separate file
