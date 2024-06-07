@@ -18,3 +18,4 @@
 - [x] AI
 - [ ] Terminal specific keymappings
 - [ ] Extract key mappings into separate file
+- [ ] mini.ai
