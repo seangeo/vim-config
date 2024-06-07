@@ -18,6 +18,7 @@ vim.opt.cmdheight = 2
 
 -- Enable line numbers
 vim.opt.number = true
+vim.opt.relativenumber = true
 
 -- Enable window titles
 vim.opt.title = true
