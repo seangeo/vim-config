@@ -43,17 +43,3 @@ vim.opt.termguicolors = true
 
 -- Enable the sign column
 vim.opt.signcolumn = "yes"
-
-vim.g.mapleader = ","
-vim.keymap.set("n", "\\", ":nohl<CR>", { silent = true })
-vim.keymap.set("c", "%%", "<C-R>=expand('%:h').'/'<cr>")
-vim.keymap.set("n", "<LEADER><LEADER>", "<C-^>")
-vim.keymap.set("n", "<LEADER>e", ":edit %%", { remap = true })
-vim.keymap.set("n", "<C-j>", "<C-W>j", {})
-vim.keymap.set("n", "<C-k>", "<C-W>k", {})
-vim.keymap.set("n", "<C-h>", "<C-W>h", {})
-vim.keymap.set("n", "<C-l>", "<C-W>l", {})
-vim.keymap.set("n", "<C-Down>", "<C-W>j", {})
-vim.keymap.set("n", "<C-Up>", "<C-W>k", {})
-vim.keymap.set("n", "<C-Left>", "<C-W>h", {})
-vim.keymap.set("n", "<C-Right>", "<C-W>l", {})
