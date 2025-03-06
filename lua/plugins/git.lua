@@ -20,4 +20,5 @@ return {
       require("gitsigns").setup()
     end,
   },
+  "tpope/vim-fugitive"
 }
