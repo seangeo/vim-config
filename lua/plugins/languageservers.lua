@@ -23,6 +23,7 @@ return {
       lspconfig.lua_ls.setup({ capabilities = capabilities })
       lspconfig.csharp_ls.setup({ capabilities = capabilities })
       lspconfig.lexical.setup({ capabilities = capabilities, cmd = { "lexical" } })
+      lspconfig.rust_analyzer.setup({})
 
       -- Global mappings.
       -- See `:help vim.diagnostic.*` for documentation on any of the below functions
