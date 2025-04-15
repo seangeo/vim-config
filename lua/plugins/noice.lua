@@ -12,6 +12,12 @@ return {
   config = function()
     local noice = require("noice")
 
+    require("notify").setup({
+      timeout = 2000,
+      stages = "fade",
+      render = "minimal"
+    })
+
     vim.keymap.set("n", "<leader>d", function()
       noice.cmd("dismiss")
     end)
