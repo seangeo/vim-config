@@ -1,6 +1,19 @@
 -- Enable system clipboard
 vim.opt.clipboard:append("unnamedplus")
 
+-- Remember cursor position
+vim.opt.viewoptions:remove("curdir")
+vim.opt.viewoptions:append("cursor,folds,slash,unix")
+vim.cmd([[
+  augroup remember_cursor_position
+    autocmd!
+    autocmd BufReadPost *
+      \ if line("'\"") > 1 && line("'\"") <= line("$") |
+      \   exe "normal! g`\"" |
+      \ endif
+  augroup END
+]])
+
 -- Tab setting
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
