@@ -21,7 +21,7 @@ return {
     config = function()
       -- Set up nvim-cmp.
       local cmp = require("cmp")
-      local cmp_select = { behavior = cmp.SelectBehavior.Select }
+      local cmp_select = { behavior = cmp.SelectBehavior.Insert }
       local lspkind = require("lspkind")
       local luasnip = require("luasnip")
 
@@ -51,13 +51,8 @@ return {
             if cmp.visible() then
               if luasnip.expandable() then
                 luasnip.expand()
-              elseif cmp.get_active_entry() then
-                cmp.confirm({
-                  select = false,
-                })
               else
-                cmp.close()
-                fallback()
+                cmp.confirm({ select = true })
               end
             else
               fallback()
