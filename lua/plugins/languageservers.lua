@@ -17,13 +17,13 @@ return {
   {
     "neovim/nvim-lspconfig",
     config = function()
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
+      local capabilities = require("cmp_nvim_lsp").default_capabilities({labelDetailsSupport = false})
 
       local lspconfig = require("lspconfig")
       lspconfig.lua_ls.setup({ capabilities = capabilities })
       lspconfig.csharp_ls.setup({ capabilities = capabilities })
       lspconfig.lexical.setup({ capabilities = capabilities, cmd = { "lexical" } })
-      lspconfig.rust_analyzer.setup({})
+      lspconfig.rust_analyzer.setup({ capabilities = capabilities })
 
       -- Global mappings.
       -- See `:help vim.diagnostic.*` for documentation on any of the below functions

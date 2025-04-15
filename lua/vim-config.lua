@@ -43,3 +43,5 @@ vim.opt.termguicolors = true
 
 -- Enable the sign column
 vim.opt.signcolumn = "yes"
+
+vim.g.rustfmt_autosave = 1
