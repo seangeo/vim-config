@@ -1,6 +1,10 @@
 -- Enable system clipboard
 vim.opt.clipboard:append("unnamedplus")
 
+-- Persist undo history
+vim.opt.undofile = true
+vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir"
+
 -- Remember cursor position
 vim.opt.viewoptions:remove("curdir")
 vim.opt.viewoptions:append("cursor,folds,slash,unix")
@@ -53,6 +57,7 @@ vim.opt.shortmess:append("c")
 
 -- 24bit Gui colors
 vim.opt.termguicolors = true
+vim.opt.winblend = 0
 
 -- Enable the sign column
 vim.opt.signcolumn = "yes"
