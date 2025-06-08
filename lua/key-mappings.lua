@@ -18,6 +18,7 @@ local mappings = {
   ["±"] = { "n", ":resize +5<CR>", { silent = true }},
   ["—"] = { "n", ":resize -5<CR>", { silent = true }},
   ["≠"] = { "n", "<C-W>=", { silent = true }},
+  ["\\\\"] = { "n", ":nohlsearch<CR>", { desc = "Remove search highlighting", silent = true }},
 }
 
 local function map(mode, key, result, opts)
