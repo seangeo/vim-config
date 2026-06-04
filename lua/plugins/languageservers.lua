@@ -9,7 +9,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "lexical" },
+        ensure_installed = { "lua_ls", "lexical", "vtsls", "eslint" },
         automatic_installation = true,
       })
     end,
@@ -23,6 +23,41 @@ return {
       lspconfig.lua_ls.setup({ capabilities = capabilities })
       lspconfig.csharp_ls.setup({ capabilities = capabilities })
       lspconfig.lexical.setup({ capabilities = capabilities, cmd = { "lexical" } })
+
+      -- TypeScript / JavaScript via vtsls. Formatting is left to prettier
+      -- (none-ls), so vtsls's own formatter is disabled on attach to avoid
+      -- competing formatters on <leader>F / format-on-save.
+      lspconfig.vtsls.setup({
+        capabilities = capabilities,
+        on_attach = function(client)
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentRangeFormattingProvider = false
+        end,
+        settings = {
+          typescript = {
+            inlayHints = {
+              parameterNames = { enabled = "literals" },
+              parameterTypes = { enabled = true },
+              variableTypes = { enabled = true },
+              propertyDeclarationTypes = { enabled = true },
+              functionLikeReturnTypes = { enabled = true },
+              enumMemberValues = { enabled = true },
+            },
+          },
+        },
+      })
+
+      -- ESLint diagnostics with fix-on-save. The autocmd is registered per
+      -- buffer on attach so it only runs in projects where eslint is present.
+      lspconfig.eslint.setup({
+        capabilities = capabilities,
+        on_attach = function(_, bufnr)
+          vim.api.nvim_create_autocmd("BufWritePre", {
+            buffer = bufnr,
+            command = "EslintFixAll",
+          })
+        end,
+      })
 
       -- Configure enhanced diagnostics display
       vim.diagnostic.config({
