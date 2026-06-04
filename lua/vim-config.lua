@@ -62,4 +62,3 @@ vim.opt.winblend = 0
 -- Enable the sign column
 vim.opt.signcolumn = "yes"
 
-vim.g.rustfmt_autosave = 1

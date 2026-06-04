@@ -13,6 +13,7 @@ return {
       adapters = {
         require("neotest-dotnet"),
         require("neotest-elixir"),
+        require("rustaceanvim.neotest"),
       },
     })
 
