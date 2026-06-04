@@ -23,7 +23,46 @@ return {
       lspconfig.lua_ls.setup({ capabilities = capabilities })
       lspconfig.csharp_ls.setup({ capabilities = capabilities })
       lspconfig.lexical.setup({ capabilities = capabilities, cmd = { "lexical" } })
-      lspconfig.rust_analyzer.setup({ capabilities = capabilities })
+
+      -- Configure enhanced diagnostics display
+      vim.diagnostic.config({
+        virtual_text = {
+          enabled = true,
+          source = "if_many",
+          prefix = "●", -- Could be '●', '▎', 'x', '■', etc.
+          spacing = 4,
+          format = function(diagnostic)
+            -- Limit line length and add source
+            local message = diagnostic.message:gsub("\n", " ")
+            if #message > 50 then
+              message = message:sub(1, 47) .. "..."
+            end
+            return string.format("%s [%s]", message, diagnostic.source or "rust")
+          end,
+        },
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = "✘",
+            [vim.diagnostic.severity.WARN] = "▲",
+            [vim.diagnostic.severity.HINT] = "⚑",
+            [vim.diagnostic.severity.INFO] = "»",
+          },
+        },
+        underline = true,
+        update_in_insert = false,
+        severity_sort = true,
+        float = {
+          focusable = false,
+          style = "minimal",
+          border = "rounded",
+          source = "always",
+          header = "",
+          prefix = "",
+          format = function(diagnostic)
+            return string.format("%s (%s)", diagnostic.message, diagnostic.source or "rust")
+          end,
+        },
+      })
 
       -- Global mappings.
       -- See `:help vim.diagnostic.*` for documentation on any of the below functions
