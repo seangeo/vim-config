@@ -9,7 +9,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "lexical", "vtsls", "eslint" },
+        ensure_installed = { "lua_ls", "lexical", "vtsls", "eslint", "sqls" },
         automatic_installation = true,
       })
     end,
@@ -23,6 +23,7 @@ return {
       lspconfig.lua_ls.setup({ capabilities = capabilities })
       lspconfig.csharp_ls.setup({ capabilities = capabilities })
       lspconfig.lexical.setup({ capabilities = capabilities, cmd = { "lexical" } })
+      lspconfig.sqls.setup({ capabilities = capabilities })
 
       -- TypeScript / JavaScript via vtsls. Formatting is left to prettier
       -- (none-ls), so vtsls's own formatter is disabled on attach to avoid
