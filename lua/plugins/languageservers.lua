@@ -23,7 +23,16 @@ return {
       lspconfig.lua_ls.setup({ capabilities = capabilities })
       lspconfig.csharp_ls.setup({ capabilities = capabilities })
       lspconfig.lexical.setup({ capabilities = capabilities, cmd = { "lexical" } })
-      lspconfig.sqls.setup({ capabilities = capabilities })
+      lspconfig.sqls.setup({
+        capabilities = capabilities,
+        root_dir = require("lspconfig.util").root_pattern(".sqls.yaml", "config.yml", ".git"),
+        on_new_config = function(config, root_dir)
+          local sqls_config = root_dir .. "/.sqls.yaml"
+          if vim.fn.filereadable(sqls_config) == 1 then
+            config.cmd = { "sqls", "-config", sqls_config }
+          end
+        end,
+      })
 
       -- TypeScript / JavaScript via vtsls. Formatting is left to prettier
       -- (none-ls), so vtsls's own formatter is disabled on attach to avoid
