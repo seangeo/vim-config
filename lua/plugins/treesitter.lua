@@ -12,7 +12,7 @@ return {
         enable = true,
         additional_vim_regex_highlighting = { "sql" },
       },
-      indent = { enable = true },
+      indent = { enable = true, disable = { "sql" } },
     })
   end,
 }
