@@ -19,30 +19,31 @@ return {
     config = function()
       local capabilities = require("cmp_nvim_lsp").default_capabilities({labelDetailsSupport = false})
 
-      local lspconfig = require("lspconfig")
-      lspconfig.lua_ls.setup({ capabilities = capabilities })
-      lspconfig.csharp_ls.setup({ capabilities = capabilities })
-      -- Expert (Elixir) only ships a new-style config (lsp/expert.lua), so it
-      -- must be configured via the native vim.lsp API rather than the legacy
-      -- lspconfig framework.
-      vim.lsp.config("expert", { capabilities = capabilities })
-      vim.lsp.enable("expert")
-      lspconfig.sqls.setup({
-        capabilities = capabilities,
-        root_dir = require("lspconfig.util").root_pattern(".sqls.yaml", "config.yml", ".git"),
-        on_new_config = function(config, root_dir)
-          local sqls_config = root_dir .. "/.sqls.yaml"
-          if vim.fn.filereadable(sqls_config) == 1 then
-            config.cmd = { "sqls", "-config", sqls_config }
+      -- Servers are configured with the native vim.lsp API (the legacy
+      -- require("lspconfig") framework is deprecated and will be removed in
+      -- nvim-lspconfig v3). The "*" config applies to every server.
+      vim.lsp.config("*", { capabilities = capabilities })
+
+      -- sqls: use a project-local .sqls.yaml for connection config when present.
+      vim.lsp.config("sqls", {
+        root_markers = { ".sqls.yaml", "config.yml", ".git" },
+        -- Note: on nvim 0.11 the cmd function only receives dispatchers (the
+        -- resolved config is not passed in), so the root is re-derived here.
+        cmd = function(dispatchers)
+          local cmd = { "sqls" }
+          local root = vim.fs.root(0, { ".sqls.yaml", "config.yml", ".git" })
+          local sqls_config = root and (root .. "/.sqls.yaml")
+          if sqls_config and vim.fn.filereadable(sqls_config) == 1 then
+            cmd = { "sqls", "-config", sqls_config }
           end
+          return vim.lsp.rpc.start(cmd, dispatchers)
         end,
       })
 
       -- TypeScript / JavaScript via vtsls. Formatting is left to prettier
       -- (none-ls), so vtsls's own formatter is disabled on attach to avoid
       -- competing formatters on <leader>F / format-on-save.
-      lspconfig.vtsls.setup({
-        capabilities = capabilities,
+      vim.lsp.config("vtsls", {
         on_attach = function(client)
           client.server_capabilities.documentFormattingProvider = false
           client.server_capabilities.documentRangeFormattingProvider = false
@@ -63,15 +64,22 @@ return {
 
       -- ESLint diagnostics with fix-on-save. The autocmd is registered per
       -- buffer on attach so it only runs in projects where eslint is present.
-      lspconfig.eslint.setup({
-        capabilities = capabilities,
-        on_attach = function(_, bufnr)
+      -- The default on_attach must be chained because it creates the
+      -- LspEslintFixAll command.
+      local eslint_on_attach = vim.lsp.config.eslint.on_attach
+      vim.lsp.config("eslint", {
+        on_attach = function(client, bufnr)
+          if eslint_on_attach then
+            eslint_on_attach(client, bufnr)
+          end
           vim.api.nvim_create_autocmd("BufWritePre", {
             buffer = bufnr,
-            command = "EslintFixAll",
+            command = "LspEslintFixAll",
           })
         end,
       })
+
+      vim.lsp.enable({ "lua_ls", "csharp_ls", "expert", "sqls", "vtsls", "eslint" })
 
       -- Configure enhanced diagnostics display
       vim.diagnostic.config({
