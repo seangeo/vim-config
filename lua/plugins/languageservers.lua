@@ -9,7 +9,7 @@ return {
     "williamboman/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "lexical", "vtsls", "eslint", "sqls" },
+        ensure_installed = { "lua_ls", "expert", "vtsls", "eslint", "sqls" },
         automatic_installation = true,
       })
     end,
@@ -22,7 +22,11 @@ return {
       local lspconfig = require("lspconfig")
       lspconfig.lua_ls.setup({ capabilities = capabilities })
       lspconfig.csharp_ls.setup({ capabilities = capabilities })
-      lspconfig.lexical.setup({ capabilities = capabilities, cmd = { "lexical" } })
+      -- Expert (Elixir) only ships a new-style config (lsp/expert.lua), so it
+      -- must be configured via the native vim.lsp API rather than the legacy
+      -- lspconfig framework.
+      vim.lsp.config("expert", { capabilities = capabilities })
+      vim.lsp.enable("expert")
       lspconfig.sqls.setup({
         capabilities = capabilities,
         root_dir = require("lspconfig.util").root_pattern(".sqls.yaml", "config.yml", ".git"),
