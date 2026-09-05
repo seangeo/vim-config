@@ -10,7 +10,11 @@ return {
     config = function()
       require("mason-lspconfig").setup({
         ensure_installed = { "lua_ls", "expert", "vtsls", "eslint", "sqls" },
-        automatic_installation = true,
+        -- mason-lspconfig v2 auto-enables every installed Mason package that has a
+        -- matching lspconfig entry. stylua is installed as a *formatter* (see none-ls)
+        -- but lspconfig ships a `stylua` server spec running `stylua --lsp`, which the
+        -- 2.x CLI does not support -- it crashed on every lua buffer. Keep it excluded.
+        automatic_enable = { exclude = { "stylua", "stylua3p_ls" } },
       })
     end,
   },
