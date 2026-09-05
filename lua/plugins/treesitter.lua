@@ -7,7 +7,16 @@ return {
     local parsers =
       { "lua", "vim", "vimdoc", "query", "html", "regex", "bash", "rust", "typescript", "tsx", "javascript", "sql", "elixir", "heex", "eex" }
 
-    require("nvim-treesitter").install(parsers)
+    -- the main branch shells out to the tree-sitter CLI to build parsers; without it
+    -- installs fail silently and stale parsers get paired with newer queries
+    if vim.fn.executable("tree-sitter") == 1 then
+      require("nvim-treesitter").install(parsers)
+    else
+      vim.notify(
+        "tree-sitter CLI not found: nvim-treesitter cannot build parsers.\nInstall it with `brew install tree-sitter-cli`.",
+        vim.log.levels.WARN
+      )
+    end
 
     -- indent is skipped for sql: its treesitter indent query is unreliable, fall back to vim's built-in indent
     local filetypes = {
