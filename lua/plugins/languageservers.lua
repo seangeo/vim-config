@@ -161,6 +161,18 @@ return {
             { buffer = ev.buf, desc = "Code Actions" }
           )
           vim.keymap.set("n", "gr", vim.lsp.buf.references, { buffer = ev.buf, desc = "References" })
+          vim.keymap.set(
+            "n",
+            "<leader>ci",
+            vim.lsp.buf.incoming_calls,
+            { buffer = ev.buf, desc = "Incoming calls" }
+          )
+          vim.keymap.set(
+            "n",
+            "<leader>co",
+            vim.lsp.buf.outgoing_calls,
+            { buffer = ev.buf, desc = "Outgoing calls" }
+          )
           vim.keymap.set("n", "<leader>F", function()
             vim.lsp.buf.format({ async = true })
           end, { buffer = ev.buf, desc = "Format" })
