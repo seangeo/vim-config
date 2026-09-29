@@ -34,6 +34,7 @@ return {
         },
         lualine_c = {
           { "filename", path = 1 },
+          { "aerial", sep = " > ", dense = false, colored = false },
         },
         lualine_x = {
           {
