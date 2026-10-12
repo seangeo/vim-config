@@ -9,11 +9,13 @@ return {
     "williamboman/mason-lspconfig.nvim",
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "expert", "vtsls", "eslint", "sqls" },
-        -- mason-lspconfig v2 auto-enables every installed Mason package that has a
-        -- matching lspconfig entry. stylua is installed as a *formatter* (see none-ls)
-        -- but lspconfig ships a `stylua` server spec running `stylua --lsp`, which the
-        -- 2.x CLI does not support -- it crashed on every lua buffer. Keep it excluded.
+        ensure_installed = { "lua_ls", "elixirls", "vtsls", "eslint", "sqls" },
+        -- mason-lspconfig v2 auto-enables every *installed* Mason package that has a
+        -- matching lspconfig entry -- not just the ones in ensure_installed above --
+        -- so anything installed previously has to be excluded here to stay off.
+        -- stylua is installed as a *formatter* (see none-ls) but lspconfig ships a
+        -- `stylua` server spec running `stylua --lsp`, which the 2.x CLI does not
+        -- support -- it crashed on every lua buffer.
         automatic_enable = { exclude = { "stylua", "stylua3p_ls" } },
       })
     end,
@@ -83,7 +85,78 @@ return {
         end,
       })
 
-      vim.lsp.enable({ "lua_ls", "csharp_ls", "expert", "sqls", "vtsls", "eslint" })
+      -- elixirls: fetchDeps defaults to true, which runs `mix deps.get` on its
+      -- own the first time it sees a project -- disabled so deps management
+      -- stays a deliberate, explicit action. elixirls is the diagnostics /
+      -- formatting source of truth for Elixir (see expert's on_attach below
+      -- for why).
+      vim.lsp.config("elixirls", {
+        settings = {
+          elixirLS = {
+            dialyzerEnabled = true,
+            fetchDeps = false,
+          },
+        },
+      })
+
+      -- expert bundles its own unnamespaced copy of mint, which collides with
+      -- a project's own mint dependency and crashes its whole-project
+      -- diagnostics (https://github.com/expert-lsp/expert/issues/910), so
+      -- elixirls covers diagnostics instead. expert stays attached anyway
+      -- because its documentSymbol response is far richer (full
+      -- pattern-matched function heads) -- aerial.lua prioritizes it for the
+      -- outline. Its own diagnostics and formatting are disabled here so
+      -- elixirls doesn't get duplicated or fought with.
+      vim.lsp.config("expert", {
+        on_attach = function(client)
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentRangeFormattingProvider = false
+          local ns = vim.lsp.diagnostic.get_namespace(client.id)
+          vim.diagnostic.config(
+            { virtual_text = false, signs = false, underline = false, virtual_lines = false },
+            ns
+          )
+        end,
+      })
+
+      -- dexter: elixir-ls and expert both lack textDocument/rename support
+      -- (https://github.com/elixir-lsp/elixir-ls/issues/765), dexter has it
+      -- (plus renaming the file to match, when the module follows
+      -- convention). Installed via Homebrew, not Mason. Trimmed to just
+      -- rename + code actions (its "add missing alias" action is also
+      -- unique) so it doesn't duplicate hover/completion/go-to-def/etc.
+      -- already covered by elixirls and expert.
+      vim.lsp.config("dexter", {
+        on_attach = function(client)
+          client.server_capabilities.completionProvider = nil
+          client.server_capabilities.hoverProvider = nil
+          client.server_capabilities.definitionProvider = nil
+          client.server_capabilities.referencesProvider = nil
+          client.server_capabilities.documentSymbolProvider = nil
+          client.server_capabilities.workspaceSymbolProvider = nil
+          client.server_capabilities.signatureHelpProvider = nil
+          client.server_capabilities.documentHighlightProvider = nil
+          client.server_capabilities.callHierarchyProvider = nil
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentRangeFormattingProvider = false
+          local ns = vim.lsp.diagnostic.get_namespace(client.id)
+          vim.diagnostic.config(
+            { virtual_text = false, signs = false, underline = false, virtual_lines = false },
+            ns
+          )
+        end,
+      })
+
+      vim.lsp.enable({
+        "lua_ls",
+        "csharp_ls",
+        "elixirls",
+        "expert",
+        "dexter",
+        "sqls",
+        "vtsls",
+        "eslint",
+      })
 
       -- Configure enhanced diagnostics display
       vim.diagnostic.config({
@@ -137,6 +210,32 @@ return {
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(ev)
+          -- expert usually finishes attaching after elixirls, and aerial's own
+          -- first-attach race (aerial/backends/init.lua) already locked in
+          -- elixirls's plain-name symbols by then, with nothing to re-trigger
+          -- a fetch until the buffer changes. Force a refetch here instead of
+          -- inside aerial's own (VeryLazy-lazy-loaded) config, so it's wired
+          -- up in time even for the very first buffer of the session.
+          --
+          -- A refetch fired immediately on attach is too early: expert's own
+          -- project compile/index isn't ready yet, so it answers with an
+          -- empty documentSymbol response, which aerial silently discards --
+          -- nothing else re-triggers a fetch afterward, so the outline gets
+          -- stuck on elixirls's plain names. Confirmed empirically that a
+          -- retry a few seconds later reliably gets expert's real response,
+          -- so retry a few times with backoff instead of once immediately.
+          local client = vim.lsp.get_client_by_id(ev.data.client_id)
+          if client and client.name == "expert" then
+            local buf = ev.buf
+            for _, delay in ipairs({ 4000, 8000, 12000 }) do
+              vim.defer_fn(function()
+                if vim.api.nvim_buf_is_valid(buf) then
+                  require("aerial").refetch_symbols(buf)
+                end
+              end, delay)
+            end
+          end
+
           -- Enable completion triggered by <c-x><c-o>
           --vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
