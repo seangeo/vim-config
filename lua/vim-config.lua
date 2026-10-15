@@ -5,6 +5,20 @@ vim.opt.clipboard:append("unnamedplus")
 vim.opt.undofile = true
 vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir"
 
+-- Files are edited outside nvim (e.g. by Claude Code): reload them when they
+-- change on disk, and skip swap files so concurrent writes don't prompt.
+vim.opt.autoread = true
+vim.opt.swapfile = false
+vim.opt.updatetime = 250
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "TermLeave" }, {
+  group = vim.api.nvim_create_augroup("checktime_on_disk_change", {}),
+  callback = function()
+    if vim.fn.mode() ~= "c" then
+      vim.cmd("checktime")
+    end
+  end,
+})
+
 -- Remember cursor position
 vim.opt.viewoptions:remove("curdir")
 vim.opt.viewoptions:append("cursor,folds,slash,unix")
